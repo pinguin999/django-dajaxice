@@ -5,6 +5,8 @@ import json
 from django.views.generic.base import View
 from django.http import HttpResponse, Http404
 from distutils.version import StrictVersion
+import sys
+
 
 from dajaxice.exceptions import FunctionNotCallableError
 from dajaxice.core import dajaxice_functions, dajaxice_config
@@ -17,6 +19,8 @@ def safe_dict(d):
     Recursively clone json structure with UTF-8 dictionary keys
     http://www.gossamer-threads.com/lists/python/bugs/684379
     """
+    if sys.version_info[0] == 3:
+        return dict(d)
     if isinstance(d, dict):
         return dict([(k.encode('utf-8'), safe_dict(v)) for k, v in d.iteritems()])
     elif isinstance(d, list):
